@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>行政区划历史变更分析系统</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            margin:40px;
+            background:#f5f5f5;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin-bottom:20px;
+            border-radius:10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>国家行政区划历史变更分析系统</h1>
+
+<div class="card">
+
+<h2>数据概览</h2>
+
+<p>数据总量：{{ total }}</p>
+
+<p>关系数量：{{ relation_count }}</p>
+
+</div>
+
+<div class="card">
+
+<h2>原始文本</h2>
+
+<p>{{ sample }}</p>
+
+</div>
+
+<div class="card">
+
+<h2>NER 实体识别结果</h2>
+
+<p><b>行政区划：</b>{{ ner.area }}</p>
+
+<p><b>动作：</b>{{ ner.action }}</p>
+
+<p><b>日期：</b>{{ ner.date }}</p>
+
+</div>
+
+<div class="card">
+
+<h2>分类结果</h2>
+
+<p>{{ category }}</p>
+
+</div>
+
+<div class="card">
+
+<h2>知识图谱</h2>
+
+<a href="/graph">查看图谱页面</a>
+
+</div>
+
+<div class="card">
+
+<h2>时序统计图</h2>
+
+<img src="/static/forecast.png" width="700">
+
+</div>
+
+</body>
+</html>
