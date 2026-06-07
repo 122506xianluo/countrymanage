@@ -1,7 +1,7 @@
 
 from flask import Flask, render_template
 from src.data_clean import load_changes
-# from src.ner import extract_entities
+from src.ner import extract_entities
 from src.relation import extract_relations
 from src.classify import classify_text
 from src.graph import build_graph

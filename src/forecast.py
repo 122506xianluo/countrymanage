@@ -1,5 +1,12 @@
 
 import matplotlib.pyplot as plt
+# ================= 解决图表中文显示为方块的问题 =================
+plt.rcParams[
+'font.sans-serif'] = ['Microsoft YaHei', 'SimHei']  # 优先使用微软雅黑或黑体
+plt.rcParams[
+'axes.unicode_minus'] = False  # 正常显示负号
+# ==============================================================
+
 from collections import Counter
 import re
 
