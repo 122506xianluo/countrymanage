@@ -1,19 +1,19 @@
-# src/relation.py
 import re
 
 
 def extract_dual_relations(text):
     """
-    高级双路解构引擎（给离线清洗数据 build_graph_data.py 用的）
+    升级版抽取引擎：专职处理动态变更事件
+    (静态隶属关系已交由官方 divisions.csv 处理，此处不再用正则猜测)
     """
+    # 容错处理：如果传进来的不是纯文本，直接返回空字典
     if not isinstance(text, str):
         return {"dynamic": [], "static": []}
 
     dynamic_edges = []
-    static_edges = []
 
-    pattern_dynamic = re.compile(r"撤销(?P<old_name>[^，。、；]+).*?设立(?P<new_name>[^，。、；]+)")
-    pattern_static = re.compile(r"^(?P<parent>.*?[省市州盟自治区])(?P<child>.+?[市区县旗])$")
+    # 1. 专注动态变更提取（保留你原本的撤销/设立逻辑）
+    pattern_dynamic = re.compile(r"撤销(?P<old_name>[^、，。]+).*?设立(?P<new_name>[^、，。]+)")
 
     match_dyn = pattern_dynamic.search(text)
     if match_dyn:
@@ -21,24 +21,19 @@ def extract_dual_relations(text):
         new_name = match_dyn.group('new_name').strip()
 
         dynamic_edges.append({
-            "source_node": old_name, "relation": "变更设立", "target_node": new_name, "type": "dynamic"
+            "source_node": old_name,
+            "relation": "变更设立",
+            "target_node": new_name,
+            "type": "DYNAMIC"  # 规范化分类标签
         })
 
-        match_sta = pattern_static.search(new_name)
-        if match_sta:
-            static_edges.append({
-                "source_node": match_sta.group('child'), "relation": "隶属于", "target_node": match_sta.group('parent'),
-                "type": "static"
-            })
+    # 你可以在这里继续追加其他动态正则，比如“更名”的正则
+    # pattern_rename = re.compile(r"(?P<old_name>.*?)更名为(?P<new_name>.*)")
+    # ...
 
-    return {"dynamic": dynamic_edges, "static": static_edges}
-
-
-def extract_relations(text):
-    """
-    兼容接口（专门给 app.py 用的）
-    确保返回的是一个【列表 List】，防止 extend() 函数把它拆碎！
-    """
-    dual_result = extract_dual_relations(text)
-    # 将动态边和静态边合并成一个大的列表返回
-    return dual_result["dynamic"] + dual_result["static"]
+    # 2. 核心改动：不再生成 static_edges
+    # 返回空的 static 列表，确保外部拆包逻辑 (result["static"]) 不会报错
+    return {
+        "dynamic": dynamic_edges,
+        "static": []
+    }
